@@ -49,56 +49,48 @@ class ContactTest extends TestCase
             'The name is required' =>
             [
                 ['contact' => 123456780, 'email' => '1@gmail.com'],
-                //name required
                 ['name']
             ],
 
             'The name should be at least 6 characters' =>
             [
                 ['name' => 'jafss', 'contact' => 123456780, 'email' => '1@gmail.com'],
-                //name should be at least 6 characters
                 ['name']
             ],
 
             'The contact is required' =>
             [
                 ['name' => 'qqqqqq', 'email' => '1@gmail.com'],
-                //contact required
                 ['contact']
             ],
 
             'The contact contact should be 9 digits' =>
             [
                 ['name' => 'jafsss', 'contact' => 12345678, 'email' => '1@gmail.com'],
-                //contact should be 9 digits
                 ['contact']
             ],
 
             'The contact should be unique' =>
             [
                 ['name' => 'jafsss', 'contact' => 123456789, 'email' => '1@gmail.com'],
-                //contact should be unique
                 ['contact']
             ],
 
             'The email is required' =>
             [
                 ['name' => 'abcdef', 'contact' => 123456780],
-                //email required
                 ['email']
             ],
 
             'The email should be email' =>
             [
                 ['name' => 'jafsss', 'contact' => 123456780, 'email' => 'sdfsdf'],
-                //email should be email
                 ['email']
             ],
 
             'The email should be unique' =>
             [
                 ['name' => 'jafsss', 'contact' => 123456780, 'email' => 'test@gmail.com'],
-                //email should be unique
                 ['email']
             ],
         ];
