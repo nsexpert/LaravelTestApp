@@ -6,6 +6,8 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use App\Models\Contact;
+use App\Models\User;
+use Hash;
 
 class ContactTest extends TestCase
 {
@@ -15,9 +17,38 @@ class ContactTest extends TestCase
      * @return void
      */
 
+     /** @test */
+     public function test_user_can_login_with_correct_credentials()
+     {
+        $user = User::factory()->create([
+            'password' => Hash::make($password = 'laravel'),
+        ]);
+ 
+         $response = $this->post('/login', [
+            'email' => $user->email,
+            'password' => $password,
+        ]);
+ 
+         $response->assertRedirect('/contacts');
+         $this->assertAuthenticatedAs($user);
+
+     }
+
     /** @test */
     public function a_user_can_create_a_contact(): void
     {
+        $user = User::factory()->create([
+            'password' => Hash::make($password = 'laravel'),
+        ]);
+ 
+         $response = $this->post('/login', [
+            'email' => $user->email,
+            'password' => $password,
+        ]);
+ 
+         $response->assertRedirect('/contacts');
+         $this->assertAuthenticatedAs($user);
+
         $this->post('/contacts', ['name' => 'qwerty', 'contact' => 123456789, 'email' => 'test@gmail.com'])->assertStatus(302);
         $this->assertDatabaseHas('contacts', ['name' => 'qwerty', 'contact' => 123456789, 'email' => 'test@gmail.com']);
     }
@@ -36,11 +67,24 @@ class ContactTest extends TestCase
      * @dataProvider invalidContacts*/
     public function invalid_contact($invalidData, $invalidFields): void
     {
+        $user = User::factory()->create([
+            'password' => Hash::make($password = 'laravel'),
+        ]);
+ 
+         $response = $this->post('/login', [
+            'email' => $user->email,
+            'password' => $password,
+        ]);
+ 
+         $response->assertRedirect('/contacts');
+         $this->assertAuthenticatedAs($user);
+
         $this->post('/contacts', $invalidData)
             ->assertSessionHasErrors($invalidFields)
             ->assertStatus(302);
 
-        $this->assertDatabaseCount('contacts', 1);
+        // $this->assertDatabaseCount('contacts', 1);
+        $this->assertDatabaseMissing('contacts', $invalidData);
     }
 
     public function invalidContacts()
