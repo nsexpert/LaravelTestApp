@@ -1,6 +1,6 @@
-@extends('contacts.template')
+@extends('app')
 
-@section('title', 'Edit')
+@section('title', 'Contact | Edit')
 
 @section('content')
     <div class="container mt-2">
